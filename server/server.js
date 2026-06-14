@@ -65,6 +65,7 @@ function selectQuestionForToday(data) {
   data.currentQuestion = {
     questionId: selected.id,
     question: selected.question,
+    followUps: selected.followUps || [],
     date: todayStr,
     timestamp: todayStart
   };
@@ -73,6 +74,7 @@ function selectQuestionForToday(data) {
     data.answers[todayStr] = {
       questionId: selected.id,
       question: selected.question,
+      followUps: selected.followUps || [],
       answer: '',
       answered: false,
       answeredAt: null
@@ -92,6 +94,7 @@ function ensureTodayQuestion(data) {
     data.answers[todayStr] = {
       questionId: data.currentQuestion.questionId,
       question: data.currentQuestion.question,
+      followUps: data.currentQuestion.followUps || [],
       answer: '',
       answered: false,
       answeredAt: null
@@ -111,6 +114,7 @@ app.get('/api/today', (req, res) => {
       success: true,
       data: {
         question: question,
+        followUps: question.followUps || [],
         answer: todayAnswer.answer,
         answered: todayAnswer.answered,
         date: todayStr
@@ -118,7 +122,7 @@ app.get('/api/today', (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: '服务器错�? });
+    res.status(500).json({ success: false, message: '服务器错误' });
   }
 });
 
@@ -151,7 +155,7 @@ app.post('/api/answer', (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: '服务器错�? });
+    res.status(500).json({ success: false, message: '服务器错误' });
   }
 });
 
@@ -216,7 +220,7 @@ app.get('/api/history', (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: '服务器错�? });
+    res.status(500).json({ success: false, message: '服务器错误' });
   }
 });
 
@@ -229,13 +233,13 @@ app.get('/api/question-bank', (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: '服务器错�? });
+    res.status(500).json({ success: false, message: '服务器错误' });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`每日问答后端服务已启�? http://localhost:${PORT}`);
+  console.log(`每日问答后端服务已启动 http://localhost:${PORT}`);
   const data = readData();
   ensureTodayQuestion(data);
-  console.log(`今日问题已准备就�? ${data.currentQuestion.question}`);
+  console.log(`今日问题已准备就绪 ${data.currentQuestion.question}`);
 });
